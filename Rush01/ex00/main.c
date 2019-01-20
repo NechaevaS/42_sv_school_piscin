@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <unistd.h>
 #define N (4)//change to 9
 #define BSIZE (2)//change to 3 
@@ -10,7 +9,6 @@ int check(char board[N][N], int rn, int cn);
 
 int main(int argc, char **argv)
 {
-	setvbuf(stdout, 0, _IONBF, 0);
 	if (argc != (N + 1))
 	{
 		write(1, "Error\n", 6);
@@ -48,7 +46,7 @@ int main(int argc, char **argv)
 	char result[N][N];
 
 	fill(workboard, argv);
-	print_board(workboard);
+	
 	int nsolutions = 0;
 	solve(workboard, &nsolutions, result);
 	if (nsolutions == 1)
@@ -57,8 +55,6 @@ int main(int argc, char **argv)
 		return (0);
 	}
 
-
-	printf ("Number of solutions %d\n", nsolutions);
 	write(1, "Error\n", 6);
 	return (1);
 
@@ -198,7 +194,7 @@ int solve(char workboard[N][N], int *nsolutions, char result[N][N])
 		(*nsolutions)++;
 		if (*nsolutions > 1)
 			return (0);
-		printf("%d\n", *nsolutions);
+	
 		copy_board(result, workboard);
 		return (1);
 	}
