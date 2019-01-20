@@ -1,9 +1,11 @@
 #include <unistd.h>
 #define N (4)//change to 9
+#define BSIZE (2)//change to 3 
 
 void fill(char board[N][N], char **argv);
 void print_board(char board[N][N]);
-int solve(char board[N][N]);
+int solve(char board[N][N], int* count);
+int check(char board[N][N], int rn, int cn);
 
 int main(int argc, char **argv)
 {
@@ -43,10 +45,18 @@ int main(int argc, char **argv)
 	char board[N][N];
 	fill(board, argv);
 	print_board(board);
-	if (!solve(board))
+	int nsolutions = 0;
+	if (!solve(board, &nsolutions))
 	{
 		write(1, "Error\n", 6);
+		return (1);
 	}
+	else if (nsolutions != 1)
+	{
+		write(1, "Error\n", 6);
+		return (1);
+	}
+
 	print_board(board);
 	return (0);
 }
@@ -93,7 +103,7 @@ void print_board(char board[N][N])
 	}	
 }
 
-int check_row_col(char board[N][N], int rn, int cn)
+int check(char board[N][N], int rn, int cn)
 {
 	int j;
 	
@@ -110,14 +120,34 @@ int check_row_col(char board[N][N], int rn, int cn)
 		}			
 		j++;
 	}
+	
+	int i;
+	int rnbox;
+	int cnbox;
+
+	rnbox = rn / BSIZE;
+	i = rnbox * BSIZE;
+	while (i < (rnbox + 1) * BSIZE)
+	{
+		cnbox = cn / BSIZE;
+		j = cnbox * BSIZE;
+		while (j < (cnbox + 1) * BSIZE)
+		{
+			if ((rn != i || cn != j) && board[rn][cn] == board[i][j])
+			{
+				return (0);
+			}
+			j++;
+		}
+		i++;
+	}
 	return (1);
 }
 
-int solve(char board[N][N])
+int find_first_dot(char board[N][N], int *row, int *col)
 {
 	int i;
 	int j;
-	int k;
 
 	i = 0;
 	while (i < N)
@@ -127,30 +157,47 @@ int solve(char board[N][N])
 		{
 			if (board[i][j] == '.')
 			{
-				k = 1;
-				while(k <= N)
-				{
-					board[i][j] = k + 48;
-					// check square
-					if (check_row_col(board, i, j))
-					{
-						write (1, "\n", 1);
-						print_board(board);
-						// check complete and exit
-						if (solve(board))
-						{
-							return (1);	
-						}
-					}
-					k++;
-				}
-				board[i][j] = '.';
-				return (0);
+				*row = i;
+				*col = j;
+				return (1);
 			}
 			j++;
 		}
 		i++;
-
 	}
+	return (0);
+}
+
+int solve(char board[N][N], int *count)
+{
+	int i;
+	int j;
+	int k;
+
+	if (!find_first_dot(board, &i, &j))
+	{
+		(*count)++;
+		if (*count > 1)
+			return (0);
+		return (1);
+	}
+
+	k = 1;
+	while(k <= N)
+	{
+		board[i][j] = k + '0';
+		if (check(board, i, j))
+		{
+			write (1, "\n", 1);
+			print_board(board);
+			if (!solve(board, count) || *count > 1)
+			{
+				return (0);
+			}
+		}
+		k++;
+	}
+	board[i][j] = '.';
+
 	return (0);
 }
