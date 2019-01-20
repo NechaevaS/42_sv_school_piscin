@@ -1,35 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   sudoku.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: snechaev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/01/20 14:41:47 by snechaev          #+#    #+#             */
-/*   Updated: 2019/01/20 14:45:04 by snechaev         ###   ########.fr       */
+/*   Created: 2019/01/20 14:35:05 by snechaev          #+#    #+#             */
+/*   Updated: 2019/01/20 14:44:23 by snechaev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include "sudoku.h"
+#define N (4)//change to 9
+#define BSIZE (2)//change to 3
 
-int main(int argc, char **argv)
-{
-	char workboard[N][N];
-	char result[N][N];
-	
-	
-	check_param(argc, argv)
-	fill(workboard, argv);
-	
-	int nsolutions = 0;
-	solve(workboard, &nsolutions, result);
-	if (nsolutions == 1)
-	{
-		print_board(result);
-		return (0);
-	}
-
-	write(1, "Error\n", 6);
-	return (1);
-}
+void fill(char board[N][N], char **argv);
+void print_board(char board[N][N]);
+int solve(char workboard[N][N], int* nsolutions, char result[N][N]);
+int check(char board[N][N], int rn, int cn);
+int find_first_dot(char board[N][N], int *row, int *col);
+void print_board(char board[N][N]);
+void copy_board(char dst[N][N], char src[N][N]);
