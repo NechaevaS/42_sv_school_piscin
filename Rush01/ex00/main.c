@@ -1,14 +1,16 @@
+#include <stdio.h>
 #include <unistd.h>
 #define N (4)//change to 9
 #define BSIZE (2)//change to 3 
 
 void fill(char board[N][N], char **argv);
 void print_board(char board[N][N]);
-int solve(char board[N][N], int* count);
+int solve(char board[N][N], int* count, char result[N][N]);
 int check(char board[N][N], int rn, int cn);
 
 int main(int argc, char **argv)
 {
+	setvbuf(stdout, 0, _IONBF, 0);
 	if (argc != (N + 1))
 	{
 		write(1, "Error\n", 6);
@@ -28,7 +30,7 @@ int main(int argc, char **argv)
 		while (argv[i][j] != '\0')
 		{
 			l = l + 1;
-			if ((argv[i][j] < 49 || argv[i][j] > 57) && (argv[i][j] != '.'))
+			if ((argv[i][j] < '1' || argv[i][j] > '9') && (argv[i][j] != '.'))
 			{
 				write(1, "Error\n", 6);
 				return (1);
@@ -43,22 +45,41 @@ int main(int argc, char **argv)
 		i++;
 	}
 	char board[N][N];
+	char result[N][N];
+
 	fill(board, argv);
 	print_board(board);
 	int nsolutions = 0;
-	if (!solve(board, &nsolutions))
+	if (!solve(board, &nsolutions, result))
 	{
 		write(1, "Error\n", 6);
+		printf ("Number of solutions %d\n", nsolutions);
 		return (1);
 	}
 	else if (nsolutions != 1)
 	{
+		printf ("Number of solutions %d\n", nsolutions);
 		write(1, "Error\n", 6);
 		return (1);
 	}
 
-	print_board(board);
+	print_board(result);
 	return (0);
+}
+
+void copy_board(char dst[N][N], char src[N][N]) 
+{
+	int i;
+	int j;
+	i = 0;
+	while(i < N) {
+		j = 0;
+		while(j<N) {
+			dst[i][j] = src[i][j];
+			j++;
+		}
+		i++;
+	}
 }
 
 void fill(char board[N][N], char **argv)
@@ -168,36 +189,33 @@ int find_first_dot(char board[N][N], int *row, int *col)
 	return (0);
 }
 
-int solve(char board[N][N], int *count)
+int solve(char board[N][N], int *count, char result[N][N])
 {
 	int i;
 	int j;
 	int k;
-
+	
 	if (!find_first_dot(board, &i, &j))
 	{
+
 		(*count)++;
 		if (*count > 1)
 			return (0);
+		printf("%d\n", *count);
+		copy_board(result, board);
 		return (1);
 	}
 
 	k = 1;
-	while(k <= N)
+	while(k <= N && *count <= 1)
 	{
 		board[i][j] = k + '0';
 		if (check(board, i, j))
 		{
-			write (1, "\n", 1);
-			print_board(board);
-			if (!solve(board, count) || *count > 1)
-			{
-				return (0);
-			}
+			solve(board, count, result);
 		}
 		k++;
 	}
 	board[i][j] = '.';
-
 	return (0);
 }
