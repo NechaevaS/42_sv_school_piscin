@@ -5,7 +5,7 @@
 
 void fill(char board[N][N], char **argv);
 void print_board(char board[N][N]);
-int solve(char board[N][N], int* count, char result[N][N]);
+int solve(char workboard[N][N], int* nsolutions, char result[N][N]);
 int check(char board[N][N], int rn, int cn);
 
 int main(int argc, char **argv)
@@ -44,27 +44,24 @@ int main(int argc, char **argv)
 		}
 		i++;
 	}
-	char board[N][N];
+	char workboard[N][N];
 	char result[N][N];
 
-	fill(board, argv);
-	print_board(board);
+	fill(workboard, argv);
+	print_board(workboard);
 	int nsolutions = 0;
-	if (!solve(board, &nsolutions, result))
+	solve(workboard, &nsolutions, result);
+	if (nsolutions == 1)
 	{
-		write(1, "Error\n", 6);
-		printf ("Number of solutions %d\n", nsolutions);
-		return (1);
-	}
-	else if (nsolutions != 1)
-	{
-		printf ("Number of solutions %d\n", nsolutions);
-		write(1, "Error\n", 6);
-		return (1);
+		print_board(result);
+		return (0);
 	}
 
-	print_board(result);
-	return (0);
+
+	printf ("Number of solutions %d\n", nsolutions);
+	write(1, "Error\n", 6);
+	return (1);
+
 }
 
 void copy_board(char dst[N][N], char src[N][N]) 
@@ -189,33 +186,33 @@ int find_first_dot(char board[N][N], int *row, int *col)
 	return (0);
 }
 
-int solve(char board[N][N], int *count, char result[N][N])
+int solve(char workboard[N][N], int *nsolutions, char result[N][N])
 {
 	int i;
 	int j;
 	int k;
 	
-	if (!find_first_dot(board, &i, &j))
+	if (!find_first_dot(workboard, &i, &j))
 	{
 
-		(*count)++;
-		if (*count > 1)
+		(*nsolutions)++;
+		if (*nsolutions > 1)
 			return (0);
-		printf("%d\n", *count);
-		copy_board(result, board);
+		printf("%d\n", *nsolutions);
+		copy_board(result, workboard);
 		return (1);
 	}
 
 	k = 1;
-	while(k <= N && *count <= 1)
+	while(k <= N && *nsolutions <= 1)
 	{
-		board[i][j] = k + '0';
-		if (check(board, i, j))
+		workboard[i][j] = k + '0';
+		if (check(workboard, i, j))
 		{
-			solve(board, count, result);
+			solve(workboard, nsolutions, result);
 		}
 		k++;
 	}
-	board[i][j] = '.';
+	workboard[i][j] = '.';
 	return (0);
 }
