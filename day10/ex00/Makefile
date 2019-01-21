@@ -15,5 +15,5 @@ clean :
 fclean : clean
 	rm -f libft.a
 
-re: clean all
+re: fclean all
 
