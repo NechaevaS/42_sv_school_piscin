@@ -6,7 +6,7 @@
 /*   By: snechaev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/20 14:04:10 by snechaev          #+#    #+#             */
-/*   Updated: 2019/01/20 16:46:39 by snechaev         ###   ########.fr       */
+/*   Updated: 2019/01/20 17:13:54 by snechaev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 int	check_param(int argc, char **argv)
 {
 	int j;
-	int l;
 	int i;
 
 	if (argc != (N + 1))
@@ -27,14 +26,13 @@ int	check_param(int argc, char **argv)
 		j = 0;
 		while (argv[i][j] != '\0')
 		{
-			l = l + 1;
 			if ((argv[i][j] < '1' || argv[i][j] > '9') && (argv[i][j] != '.'))
 				return (0);
 			j++;
 		}
-		if (l != N)
+		if (j != N)
 			return (0);
 		i++;
 	}
-	return (0);
+	return (1);
 }
