@@ -3,8 +3,8 @@ OBJFILES = ft_putchar.o ft_putstr.o ft_strcmp.o ft_strlen.o ft_swap.o
 
 all : libft.a
 
-%.o : src/%.c 
-	gcc -Wall -Wextra -Werror -I./include -c -o $(@) $(^)
+%.o : srcs/%.c 
+	gcc -Wall -Wextra -Werror -I./includes -c -o $(@) $(^)
 
 libft.a : $(OBJFILES) 
 	ar rcu $(@) $(^)
