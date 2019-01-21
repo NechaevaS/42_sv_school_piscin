@@ -6,44 +6,35 @@
 /*   By: snechaev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/20 14:04:10 by snechaev          #+#    #+#             */
-/*   Updated: 2019/01/20 14:47:24 by snechaev         ###   ########.fr       */
+/*   Updated: 2019/01/20 16:46:39 by snechaev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include <unistd.h>
 #include "sudoku.h"
-int check_param(int argc, char **argv)
-{
-	if (argc != (N + 1))
-	{
-		write(1, "Error\n", 6);
-		return (1);
-	}
 
+int	check_param(int argc, char **argv)
+{
+	int j;
+	int l;
 	int i;
 
+	if (argc != (N + 1))
+		return (0);
 	i = 1;
 	while (i < argc)
 	{
-		int j;
-		int l;
-
-		l = 0;
 		j = 0;
 		while (argv[i][j] != '\0')
 		{
 			l = l + 1;
 			if ((argv[i][j] < '1' || argv[i][j] > '9') && (argv[i][j] != '.'))
-			{
-				write(1, "Error\n", 6);
-				return (1);
-			}
+				return (0);
 			j++;
 		}
 		if (l != N)
-		{
-			write(1, "Error\n", 6);
-			return (1);
-		}
+			return (0);
 		i++;
-		return (0);
+	}
+	return (0);
 }

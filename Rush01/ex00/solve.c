@@ -6,35 +6,29 @@
 /*   By: snechaev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/20 14:16:04 by snechaev          #+#    #+#             */
-/*   Updated: 2019/01/20 14:48:43 by snechaev         ###   ########.fr       */
+/*   Updated: 2019/01/20 16:51:07 by snechaev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include "sudoku.h"
 
-int check(char board[N][N], int rn, int cn)
+int		check(char board[N][N], int rn, int cn)
 {
 	int j;
+	int i;
+	int rnbox;
+	int cnbox;
 
 	j = 0;
 	while (j < N)
 	{
 		if (j != cn &&  board[rn][cn] == board[rn][j])
-		{
 			return (0);
-		}
 		if (j != rn && board[rn][cn] == board[j][cn])
-		{
 			return (0);
-		}
 		j++;
 	}
-
-	int i;
-	int rnbox;
-	int cnbox;
-
 	rnbox = rn / BSIZE;
 	i = rnbox * BSIZE;
 	while (i < (rnbox + 1) * BSIZE)
@@ -44,9 +38,7 @@ int check(char board[N][N], int rn, int cn)
 		while (j < (cnbox + 1) * BSIZE)
 		{
 			if ((rn != i || cn != j) && board[rn][cn] == board[i][j])
-			{
 				return (0);
-			}
 			j++;
 		}
 		i++;
@@ -54,7 +46,7 @@ int check(char board[N][N], int rn, int cn)
 	return (1);
 }
 
-int find_first_dot(char board[N][N], int *row, int *col)
+int		find_first_dot(char board[N][N], int *row, int *col)
 {
 	int i;
 	int j;
@@ -78,7 +70,7 @@ int find_first_dot(char board[N][N], int *row, int *col)
 	return (0);
 }
 
-int solve(char workboard[N][N], int *nsolutions, char result[N][N])
+void	solve(char workboard[N][N], int *nsolutions, char result[N][N])
 {
 	int i;
 	int j;
@@ -86,13 +78,12 @@ int solve(char workboard[N][N], int *nsolutions, char result[N][N])
 
 	if (!find_first_dot(workboard, &i, &j))
 	{
-
 		(*nsolutions)++;
 		if (*nsolutions > 1)
-			return (0);
+			return;
 
 		copy_board(result, workboard);
-		return (1);
+		return;
 	}
 
 	k = 1;
@@ -106,5 +97,4 @@ int solve(char workboard[N][N], int *nsolutions, char result[N][N])
 		k++;
 	}
 	workboard[i][j] = '.';
-	return (0);
 }
