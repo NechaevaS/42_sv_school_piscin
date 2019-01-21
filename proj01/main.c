@@ -13,7 +13,7 @@ int main(int argc, char** argv) {
 
 	if (match(argv[1], argv[2])) 
 	{
-		printf("Match");
+		printf("Match\n");
 
 	}
 	else 
