@@ -1,51 +1,31 @@
 #include <stdio.h>
 
-//#define NULL 0
-
-char *find(char *str, char ch) {
-	char* p;
-	
-	p = str;
-	while(*p != '\0' && *p != ch)
-	{
-		p++;
+int match(char* str, char* pattern, int depth) {
+	for (int i = 0; i < depth;i++) {
+		printf(" ");
 	}
 
-	if (*p == '\0')
-		return NULL;
-	
-	return p;
-}
-
-char next_after_skipped(char *str, char ch) {
-	char *p;
-	p = str;
-	while(*p != '\0' && *p == ch)
-	{
-		p++;
-	}
-
-	return *p;
-}
-
-int match(char* str, char* pattern) {
 	printf("str = %s, pattern = %s\n", str, pattern);
-	if(*pattern == '*')
+	if (*str == '\0' || *pattern == '\0')
 	{
-		char* s = str;
-		int count = 0;
-		while(*s != '\0')
+		if (*str == '\0')
 		{
-			count += match(s, pattern + 1);
-			s++;
+			if (*pattern == '\0')
+				return 1;
+			if (*pattern == '*')
+				return match(str, pattern+1, depth + 1);
 		}
+		return 0;
+	}
+	else if(*pattern == '*')
+	{
+		int count = match(str + 1, pattern, depth + 1);
+		count += match(str, pattern+1, depth + 1);
 		return count;
 	}
 	else if (*pattern == *str) 
 	{
-		if (*pattern == '\0')
-			return 1;
-		return match(str + 1, pattern + 1);
+		return match(str + 1, pattern + 1, depth + 1);
 	}
 	return (0);
 }

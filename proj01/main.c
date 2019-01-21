@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 int match(char *str, char *pattern);
+int nmatch(char *str, char *pattern);
 
 int main(int argc, char** argv) {
 	int nmatches;
@@ -10,9 +11,19 @@ int main(int argc, char** argv) {
 		return 1;
 	}
 
-	if ((nmatches = match(argv[1], argv[2]))) 
+	if (match(argv[1], argv[2])) 
 	{
-		printf("Match,  nmatches(%d)\n", nmatches);
+		printf("Match");
+
+	}
+	else 
+	{
+		printf("Fail\n");
+	}
+	
+	if ((nmatches = nmatch(argv[1], argv[2]))) 
+	{
+		printf("nmatch,  nmatches(%d)\n", nmatches);
 
 	}
 	else 
