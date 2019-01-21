@@ -10,8 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-int	match(char *str, char *pattern)
+int	nmatch(char *str, char *pattern)
 {
+	int count;
+
 	if (*str == '\0' || *pattern == '\0')
 	{
 		if (*str == '\0')
@@ -19,21 +21,19 @@ int	match(char *str, char *pattern)
 			if (*pattern == '\0')
 				return (1);
 			if (*pattern == '*')
-				return (match(str, pattern + 1));
+				return (nmatch(str, pattern + 1));
 		}
 		return (0);
 	}
 	else if (*pattern == '*')
 	{
-		if (match(str + 1, pattern))
-			return (1);
-		if (match(str, pattern + 1))
-			return (1);
-		return (0);
+		count = nmatch(str + 1, pattern);
+		count += nmatch(str, pattern + 1);
+		return (count);
 	}
 	else if (*pattern == *str)
 	{
-		return (match(str + 1, pattern + 1));
+		return (nmatch(str + 1, pattern + 1));
 	}
 	return (0);
 }
