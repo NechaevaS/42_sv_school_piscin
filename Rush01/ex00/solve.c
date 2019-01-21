@@ -6,7 +6,7 @@
 /*   By: snechaev <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/20 14:16:04 by snechaev          #+#    #+#             */
-/*   Updated: 2019/01/20 16:51:07 by snechaev         ###   ########.fr       */
+/*   Updated: 2019/01/20 17:29:29 by snechaev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,9 @@ int		check(char board[N][N], int rn, int cn)
 	while (j < N)
 	{
 		if (j != cn &&  board[rn][cn] == board[rn][j])
-			return (0);
+			return (FALSE);
 		if (j != rn && board[rn][cn] == board[j][cn])
-			return (0);
+			return (FALSE);
 		j++;
 	}
 	rnbox = rn / BSIZE;
@@ -38,12 +38,12 @@ int		check(char board[N][N], int rn, int cn)
 		while (j < (cnbox + 1) * BSIZE)
 		{
 			if ((rn != i || cn != j) && board[rn][cn] == board[i][j])
-				return (0);
+				return (FALSE);
 			j++;
 		}
 		i++;
 	}
-	return (1);
+	return (TRUE);
 }
 
 int		find_first_dot(char board[N][N], int *row, int *col)
