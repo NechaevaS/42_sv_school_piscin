@@ -1,16 +1,12 @@
 
-OBJFILES = ft_putchar.o ft_putstr.o ft_strcmp.o ft_strlen.o ft_swap.o
-
 all : libft.a
 
-%.o : srcs/%.c 
-	gcc -Wall -Wextra -Werror -I./includes -c -o $(@) $(^)
-
-libft.a : $(OBJFILES) 
-	ar rcu $(@) $(^)
+libft.a : 
+	gcc -Wall -Wextra -Werror -I./includes -c srcs/*.c
+	ar rcu libft.a *.o
 	
 clean :
-	rm -f $(OBJFILES)
+	rm -f *.o 
 
 fclean : clean
 	rm -f libft.a
