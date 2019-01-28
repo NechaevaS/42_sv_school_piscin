@@ -1,5 +1,6 @@
 #include "eval_expr.h"
 #include <stdio.h>
+//#define DEBUG 1
 
 int	is_operation(char c)
 {
@@ -39,13 +40,16 @@ int collapse_one(t_stack *ops, t_stack *opnd)
 	int x;
 	int y;
 	int r;
-
+#ifdef DEBUG
 	printf("before ----------------\n");
 	apply_all(ops, print_char);
 	printf("\n");
 	apply_all(opnd, print_int);
 	printf("\n");
-	
+#endif
+	if (is_empty(ops) && stack_size(opnd) == 1)
+		return 0;
+
 	if (stack_size(opnd) < 2 || top_stack(ops) == '(')
 		return 0;
 
@@ -60,22 +64,37 @@ int collapse_one(t_stack *ops, t_stack *opnd)
 
 	r = eval(op, x, y);
 	push_stack(opnd, r);
+#ifdef DEBUG
 	printf("after ----------------\n");
 	apply_all(ops, print_char);
 	printf("\n");
 	apply_all(opnd, print_int);
 	printf("\n");
+#endif
 	return 1;
 }
 
 void collapse(t_stack *ops, t_stack *opnd)
 {
 	int op;
-	
+//	printf("Collapse\n");	
 	op = top_stack(ops);
 	//while(!is_empty(ops) && priority(op) == priority(top_stack(ops)))
 	while(priority(op) == priority(top_stack(ops)) && collapse_one(ops, opnd));
 
+}
+
+void collapse_braces(t_stack *ops, t_stack *opnd) 
+{
+//	printf("Braces\n");
+//if (top_stack(ops) != '(')
+//		return;
+
+	while(top_stack(ops) != '(')
+	{
+		collapse(ops, opnd);
+	}
+	pop_stack(ops);
 }
 
 int	eval_expr(char *str)
@@ -84,15 +103,28 @@ int	eval_expr(char *str)
 	t_stack *ops;
 	t_stack *opnd;
 	int num;
+	int last_op;
 
 	ops = create_stack();
 	opnd = create_stack();
 	
+	last_op = 0;
 	while (*str != '\0')
 	{
-//		printf("'%s'\n", str);
+	//	printf("str: '%s'\n", str);
+		
 		skipws(&str);
-		if (is_operation(*str))
+		
+		if (*str == '\0')
+			break;
+		if (last_op != 0 && last_op != ')' && (*str == '+' || *str == '-'))
+		{
+			num = getnum(&str);
+			push_stack(opnd, num);
+			last_op = 0;
+	//		printf("PUSH %d\n", num);
+		}
+		else if (is_operation(*str))
 		{
 			if (is_empty(ops))
 			{
@@ -104,27 +136,25 @@ int	eval_expr(char *str)
 			}
 			else if (*str == ')')
 			{
-				while(top_stack(ops) != '(')
-				{
-					collapse(ops, opnd);
-				}
-				pop_stack(ops);
+				collapse_braces(ops, opnd);
 			}
 			else
 			{
-				printf("looop\n");
+	//			printf("looop\n");
 				collapse(ops, opnd);
 				push_stack(ops, *str);
 			}
+			last_op = *str;
 			str = str + 1;
 		}
 		else
 		{
 			num = getnum(&str);
 			push_stack(opnd, num);
+			last_op = 0;
 		}
 	}
-	printf("end\n");
+	//printf("end\n");
 	while(!is_empty(ops)) {
 		collapse(ops, opnd);
 	}

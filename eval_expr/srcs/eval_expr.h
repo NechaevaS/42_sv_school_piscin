@@ -1,6 +1,8 @@
 #ifndef EVAL_EXPR_H
 # define EVAL_EXPR_H
 # define STACK_SIZE 2048
+# define TRUE 1
+# define FALSE 0
 
 typedef struct s_struct
 	{
