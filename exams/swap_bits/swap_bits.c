@@ -18,9 +18,9 @@ unsigned char	swap_bits(unsigned char octet)
 	unsigned char new;
 
 	mask = 0b11110000;
-	first = octet & mask >> 4;
+	first = (octet & mask) >> 4;
 	mask = 0b00001111;
-	sec = octet & mask << 4;
+	sec = (octet & mask) << 4;
 	new = first | sec;
 	return (new);
 }

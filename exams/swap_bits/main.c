@@ -33,9 +33,9 @@ void	print_bits(unsigned char octet)
 
 int		main()
 {
-	print_bits(34);
+	print_bits(234);
 	write(1, "\n", 1);
-	print_bits(swap_bits(34));
+	print_bits(swap_bits(234));
 	write(1, "\n", 1);
     return (0);
 }
