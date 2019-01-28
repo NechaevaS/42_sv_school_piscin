@@ -102,7 +102,7 @@ int	eval_expr(char *str)
 		}
 		else if (is_operation(*str))
 		{
-			if (is_empty(ops) | |priority(*str) > priority(top_stack(ops)))
+			if (is_empty(ops) || priority(*str) > priority(top_stack(ops)))
 				push_stack(ops, *str);
 			else if (*str == ')')
 				collapse_braces(ops, opnd);

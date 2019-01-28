@@ -7,7 +7,7 @@ int main(int ac, char **av)
 	{
 
 		ft_putnbr(eval_expr(av[1]));
-		ft_putchar(’\n’);
+		ft_putchar('\n');
 	}
 	return (0);
 }

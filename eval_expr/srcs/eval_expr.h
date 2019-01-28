@@ -1,14 +1,12 @@
 #ifndef EVAL_EXPR_H
 # define EVAL_EXPR_H
-# define STACK_SIZE 2048
-# define TRUE 1
-# define FALSE 0
+# define STACK_SIZE (16 * 1024)
 
 typedef struct s_struct
-	{
-		int	arr[STACK_SIZE];
-		int top_i;
-	}	t_stack;
+{
+	int	arr[STACK_SIZE];
+	int top_i;
+}	t_stack;
 
 	void	skipws(char **p);
 	int	getnum(char **p);
@@ -23,6 +21,8 @@ typedef struct s_struct
 	int	eval_expr(char *str);
 	void	print_int(int i);
 	void	print_char(int i);
+	void	ft_putchar(char c);
+	void	ft_putnbr(int nb);
 	void	ft_putchar(char c);
 	void	ft_putnbr(int nb);
 #endif
