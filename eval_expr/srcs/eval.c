@@ -12,6 +12,8 @@ int priority(int op)
 		return (2);
 	else if (op == '+' || op == '-')
 		return (1);
+	else if (op == '(')
+		return (3);
 	return (-1);
 	
 }
@@ -31,17 +33,22 @@ int	eval(int op, int x, int y)
 	return (0);
 }
 
-void collapse_one(t_stack *ops, t_stack *opnd)
+int collapse_one(t_stack *ops, t_stack *opnd)
 {
 	int op;
 	int x;
 	int y;
 	int r;
+
 	printf("before ----------------\n");
 	apply_all(ops, print_char);
 	printf("\n");
 	apply_all(opnd, print_int);
 	printf("\n");
+	
+	if (stack_size(opnd) < 2 || top_stack(ops) == '(')
+		return 0;
+
 	op = top_stack(ops);
 	pop_stack(ops);
 
@@ -58,6 +65,7 @@ void collapse_one(t_stack *ops, t_stack *opnd)
 	printf("\n");
 	apply_all(opnd, print_int);
 	printf("\n");
+	return 1;
 }
 
 void collapse(t_stack *ops, t_stack *opnd)
@@ -66,10 +74,7 @@ void collapse(t_stack *ops, t_stack *opnd)
 	
 	op = top_stack(ops);
 	//while(!is_empty(ops) && priority(op) == priority(top_stack(ops)))
-	while(priority(op) == priority(top_stack(ops)))
-	{
-		collapse_one(ops, opnd);
-	}
+	while(priority(op) == priority(top_stack(ops)) && collapse_one(ops, opnd));
 
 }
 
@@ -96,6 +101,14 @@ int	eval_expr(char *str)
 			else if (priority(*str) > priority(top_stack(ops)))
 			{
 				push_stack(ops, *str);
+			}
+			else if (*str == ')')
+			{
+				while(top_stack(ops) != '(')
+				{
+					collapse(ops, opnd);
+				}
+				pop_stack(ops);
 			}
 			else
 			{

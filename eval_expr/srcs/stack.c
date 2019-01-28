@@ -38,6 +38,11 @@ int is_empty(t_stack *stk)
 	return (stk->top_i == -1);
 }
 
+int stack_size(t_stack *stk)
+{
+	return stk->top_i + 1;
+}
+
 void apply_all(t_stack *stk, void (*f)(int))
 {
 	int i;

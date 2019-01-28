@@ -16,6 +16,7 @@ typedef struct s_struct
 	void	pop_stack(t_stack *stk);
 	void	apply_all(t_stack *stk, void (*f)(int));
 	int	is_empty(t_stack *stk);
+	int 	stack_size(t_stack *stk);
 	int	eval_expr(char *str);
 	void print_int(int i);
 	void print_char(int i);
