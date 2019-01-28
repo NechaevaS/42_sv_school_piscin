@@ -107,7 +107,6 @@ int	eval_expr(char *str)
 	int res;
 	t_stack *ops;
 	t_stack *opnd;
-	int num;
 	int last_op;
 
 	ops = create_stack();
@@ -119,8 +118,7 @@ int	eval_expr(char *str)
 		skipws(&str);
 		if (is_operand(last_op, *str))
 		{
-			num = getnum(&str);
-			push_stack(opnd, num);
+			push_stack(opnd, getnum(&str));
 			last_op = 0;
 		}
 		else
@@ -132,9 +130,7 @@ int	eval_expr(char *str)
 	}
 	
 	while(!is_empty(ops))
-	{
 		collapse(ops, opnd);
-	}
 	
 	res = top_stack(opnd);
 	return (res);
