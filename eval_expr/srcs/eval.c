@@ -102,15 +102,9 @@ void process_operation(t_stack *ops, t_stack *opnd, char **str)
 	*str = p + 1;
 }
 
-int	eval_expr(char *str)
+int eval_str(t_stack *ops, t_stack *opnd, char *str)
 {
-	int res;
-	t_stack *ops;
-	t_stack *opnd;
 	int last_op;
-
-	ops = create_stack();
-	opnd = create_stack();
 	
 	last_op = -1;
 	while (*str != '\0')
@@ -132,6 +126,22 @@ int	eval_expr(char *str)
 	while(!is_empty(ops))
 		collapse(ops, opnd);
 	
-	res = top_stack(opnd);
+	return (top_stack(opnd));
+}
+
+int	eval_expr(char *str)
+{
+	int res;
+	t_stack *ops;
+	t_stack *opnd;
+
+	ops = create_stack();
+	opnd = create_stack();
+	
+	res = eval_str(ops, opnd, str);
+
+	delete_stack(ops);
+	delete_stack(opnd);
+
 	return (res);
 }
