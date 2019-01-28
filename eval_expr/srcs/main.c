@@ -3,10 +3,11 @@
 
 int main(int argc, char** argv)
 {
-	char *str;
+//	char *str;
 
 	if (argc > 1)
 	{
+#if 0		
 		str = argv[1];
 		printf("'%s'\n", str);
 		skipws(&str);
@@ -28,6 +29,7 @@ int main(int argc, char** argv)
 
 		printf("\n");
 		delete_stack(stk);
+#endif
 		printf("%d\n", eval_expr(argv[1]));
 
 	}

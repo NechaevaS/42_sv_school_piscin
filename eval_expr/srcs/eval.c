@@ -31,7 +31,7 @@ int	eval(int op, int x, int y)
 	return (0);
 }
 
-void collapse(t_stack *ops, t_stack *opnd)
+void collapse_one(t_stack *ops, t_stack *opnd)
 {
 	int op;
 	int x;
@@ -60,6 +60,19 @@ void collapse(t_stack *ops, t_stack *opnd)
 	printf("\n");
 }
 
+void collapse(t_stack *ops, t_stack *opnd)
+{
+	int op;
+	
+	op = top_stack(ops);
+	//while(!is_empty(ops) && priority(op) == priority(top_stack(ops)))
+	while(priority(op) == priority(top_stack(ops)))
+	{
+		collapse_one(ops, opnd);
+	}
+
+}
+
 int	eval_expr(char *str)
 {
 	int res;
@@ -72,7 +85,7 @@ int	eval_expr(char *str)
 	
 	while (*str != '\0')
 	{
-		printf("'%s'\n", str);
+//		printf("'%s'\n", str);
 		skipws(&str);
 		if (is_operation(*str))
 		{
@@ -99,7 +112,9 @@ int	eval_expr(char *str)
 		}
 	}
 	printf("end\n");
-	collapse(ops, opnd);
+	while(!is_empty(ops)) {
+		collapse(ops, opnd);
+	}
 	res = top_stack(opnd);
 	return (res);
 }
