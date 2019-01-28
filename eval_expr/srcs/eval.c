@@ -108,7 +108,7 @@ int	eval_expr(char *str)
 	ops = create_stack();
 	opnd = create_stack();
 	
-	last_op = 0;
+	last_op = -1;
 	while (*str != '\0')
 	{
 	//	printf("str: '%s'\n", str);
@@ -117,12 +117,12 @@ int	eval_expr(char *str)
 		
 		if (*str == '\0')
 			break;
-		if (last_op != 0 && last_op != ')' && (*str == '+' || *str == '-'))
+		if ((last_op != 0 && last_op != ')') && (*str == '+' || *str == '-'))
 		{
 			num = getnum(&str);
 			push_stack(opnd, num);
 			last_op = 0;
-	//		printf("PUSH %d\n", num);
+			// printf("PUSH %d\n", num);
 		}
 		else if (is_operation(*str))
 		{
@@ -140,7 +140,7 @@ int	eval_expr(char *str)
 			}
 			else
 			{
-	//			printf("looop\n");
+				//printf("looop\n");
 				collapse(ops, opnd);
 				push_stack(ops, *str);
 			}
