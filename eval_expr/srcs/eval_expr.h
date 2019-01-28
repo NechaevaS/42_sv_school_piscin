@@ -25,4 +25,11 @@ typedef struct s_struct
 	void	ft_putnbr(int nb);
 	void	ft_putchar(char c);
 	void	ft_putnbr(int nb);
+	int 	collapse_one(t_stack *ops, t_stack *opnd);
+	void 	collapse(t_stack *ops, t_stack *opnd);
+	void 	collapse_braces(t_stack *ops, t_stack *opnd); 
+	int	is_operation(char c);
+	int 	priority(int op);
+	int	is_operand(int last_op, int cur_ch);
+	int	eval(int op, int x, int y);
 #endif
