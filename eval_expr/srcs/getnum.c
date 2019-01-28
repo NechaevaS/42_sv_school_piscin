@@ -1,7 +1,4 @@
-int is_space(char c)
-{
-	return (c == ' ' || c == '\n' || c == '\t');
-}
+#include "eval_expr.h"
 
 int is_digit(char c)
 {
@@ -10,32 +7,27 @@ int is_digit(char c)
 
 int getnum(char **p)
 {
-	char *str;
-	int i;
+	char *pp;
 	int res;
 	int neg;
 
-	str = *p;
+	pp = *p;
 	neg = 1;
-	i = 0;
 
-	while (is_space(str[i]))
-		i++;
+	skipws(&pp);
 	
-	if (str[i] == '+')
-		i++;
-	else if (str[i] =='-')
+	if (*pp == '+')
+		pp++;
+	else if (*pp =='-')
 	{
 		neg = -1;
-		i++;
+		pp++;
 	}
 	
 	res = 0;
-	while (is_digit(str[i]))
-	{
-		res = res * 10 + (str[i] - '0');
-		i++;
-	}
-	*p = str + i;
+	while (is_digit(*pp))
+		res = res * 10 + (*pp++ - '0');
+
+	*p = pp;
 	return (res * neg);
 }
