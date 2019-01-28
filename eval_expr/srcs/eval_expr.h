@@ -7,6 +7,7 @@ typedef struct s_struct
 		int	arr[STACK_SIZE];
 		int top_i;
 	}	t_stack;
+
 	void	skipws(char **p);
 	int	getnum(char **p);
 	t_stack	*create_stack();
@@ -18,6 +19,8 @@ typedef struct s_struct
 	int	is_empty(t_stack *stk);
 	int 	stack_size(t_stack *stk);
 	int	eval_expr(char *str);
-	void print_int(int i);
-	void print_char(int i);
+	void	print_int(int i);
+	void	print_char(int i);
+	void	ft_putchar(char c);
+	void	ft_putnbr(int nb);
 #endif
