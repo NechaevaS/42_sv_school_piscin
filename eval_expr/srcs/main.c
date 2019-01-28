@@ -1,16 +1,6 @@
 #include <stdio.h>
 #include "eval_expr.h"
 
-void print_int(int i)
-{
-	printf(" %d", i);
-}
-
-void print_char(int i)
-{
-	printf(" %c", i);
-}
-
 int main(int argc, char** argv)
 {
 	char *str;

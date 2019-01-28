@@ -1,4 +1,5 @@
 #include "eval_expr.h"
+#include <stdio.h>
 
 int	is_operation(char c)
 {
@@ -36,7 +37,11 @@ void collapse(t_stack *ops, t_stack *opnd)
 	int x;
 	int y;
 	int r;
-
+	printf("before ----------------\n");
+	apply_all(ops, print_char);
+	printf("\n");
+	apply_all(opnd, print_int);
+	printf("\n");
 	op = top_stack(ops);
 	pop_stack(ops);
 
@@ -48,6 +53,11 @@ void collapse(t_stack *ops, t_stack *opnd)
 
 	r = eval(op, x, y);
 	push_stack(opnd, r);
+	printf("after ----------------\n");
+	apply_all(ops, print_char);
+	printf("\n");
+	apply_all(opnd, print_int);
+	printf("\n");
 }
 
 int	eval_expr(char *str)
@@ -62,6 +72,7 @@ int	eval_expr(char *str)
 	
 	while (*str != '\0')
 	{
+		printf("'%s'\n", str);
 		skipws(&str);
 		if (is_operation(*str))
 		{
@@ -75,9 +86,11 @@ int	eval_expr(char *str)
 			}
 			else
 			{
+				printf("looop\n");
 				collapse(ops, opnd);
 				push_stack(ops, *str);
 			}
+			str = str + 1;
 		}
 		else
 		{
@@ -85,6 +98,7 @@ int	eval_expr(char *str)
 			push_stack(opnd, num);
 		}
 	}
+	printf("end\n");
 	collapse(ops, opnd);
 	res = top_stack(opnd);
 	return (res);

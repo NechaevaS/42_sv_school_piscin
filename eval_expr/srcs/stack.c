@@ -1,5 +1,6 @@
 #include "eval_expr.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 t_stack	*create_stack()
 {
@@ -49,3 +50,14 @@ void apply_all(t_stack *stk, void (*f)(int))
 	}
 }
 				
+void print_int(int i)
+{
+
+		printf(" %d", i);
+}
+
+void print_char(int i)
+{
+
+		printf(" %c", i);
+}
