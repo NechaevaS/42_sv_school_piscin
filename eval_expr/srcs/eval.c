@@ -85,6 +85,23 @@ int is_operand(int last_op, int cur_ch)
 	return (0);
 }
 
+void process_operation(t_stack *ops, t_stack *opnd, char **str)
+{
+	char *p;
+
+	p = *str;
+	if (is_empty(ops) || priority(*p) > priority(top_stack(ops)))
+		push_stack(ops, *p);
+	else if (*p == ')')
+		collapse_braces(ops, opnd);
+	else
+	{
+		collapse(ops, opnd);
+		push_stack(ops, *p);
+	}
+	*str = p + 1;
+}
+
 int	eval_expr(char *str)
 {
 	int res;
@@ -106,25 +123,10 @@ int	eval_expr(char *str)
 			push_stack(opnd, num);
 			last_op = 0;
 		}
-		else if (is_operation(*str))
-		{
-			if (is_empty(ops) || priority(*str) > priority(top_stack(ops)))
-				push_stack(ops, *str);
-			else if (*str == ')')
-				collapse_braces(ops, opnd);
-			else
-			{
-				collapse(ops, opnd);
-				push_stack(ops, *str);
-			}
-			last_op = *str;
-			str = str + 1;
-		}
 		else
 		{
-			num = getnum(&str);
-			push_stack(opnd, num);
-			last_op = 0;
+			last_op = *str;
+			process_operation(ops, opnd, &str);
 		}
 		skipws(&str);
 	}
