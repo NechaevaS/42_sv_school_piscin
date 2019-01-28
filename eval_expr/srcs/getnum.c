@@ -2,6 +2,7 @@ int is_space(char c)
 {
 	return (c == ' ' || c == '\n' || c == '\t');
 }
+
 int is_digit(char c)
 {
 	return (c >= '0' && c <= '9');
@@ -11,7 +12,6 @@ int getnum(char **p)
 {
 	char *str;
 	int i;
-	int t;
 	int res;
 	int neg;
 
@@ -33,8 +33,7 @@ int getnum(char **p)
 	res = 0;
 	while (is_digit(str[i]))
 	{
-		t = str[i] - '0';
-		res = res * 10 + t;
+		res = res * 10 + (str[i] - '0');
 		i++;
 	}
 	*p = str + i;

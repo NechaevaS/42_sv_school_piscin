@@ -1,6 +1,5 @@
 #include "eval_expr.h"
 #include <stdlib.h>
-#include <stdio.h>
 
 t_stack	*create_stack()
 {
@@ -41,28 +40,4 @@ int is_empty(t_stack *stk)
 int stack_size(t_stack *stk)
 {
 	return stk->top_i + 1;
-}
-
-void apply_all(t_stack *stk, void (*f)(int))
-{
-	int i;
-
-	i = 0;
-	while (i <= stk->top_i)
-	{
-		f(stk->arr[i]);
-		i++;
-	}
-}
-				
-void print_int(int i)
-{
-
-		printf(" %d", i);
-}
-
-void print_char(int i)
-{
-
-		printf(" %c", i);
 }

@@ -56,7 +56,6 @@ int collapse_one(t_stack *ops, t_stack *opnd)
 
 	r = eval(op, x, y);
 	push_stack(opnd, r);
-	
 	return (1);
 }
 
@@ -91,7 +90,6 @@ int	eval_expr(char *str)
 	last_op = -1;
 	while (*str != '\0')
 	{
-		
 		skipws(&str);
 		
 		if (*str == '\0')
@@ -104,18 +102,10 @@ int	eval_expr(char *str)
 		}
 		else if (is_operation(*str))
 		{
-			if (is_empty(ops))
-			{
+			if (is_empty(ops) | |priority(*str) > priority(top_stack(ops)))
 				push_stack(ops, *str);
-			}	
-			else if (priority(*str) > priority(top_stack(ops)))
-			{
-				push_stack(ops, *str);
-			}
 			else if (*str == ')')
-			{
 				collapse_braces(ops, opnd);
-			}
 			else
 			{
 				collapse(ops, opnd);
