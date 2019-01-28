@@ -76,6 +76,15 @@ void collapse_braces(t_stack *ops, t_stack *opnd)
 	pop_stack(ops);
 }
 
+int is_operand(int last_op, int cur_ch)
+{
+	if ((last_op != 0 && last_op != ')') && (cur_ch == '+' || cur_ch == '-'))
+		return (1);
+	if (!is_operation(cur_ch))
+		return (1);
+	return (0);
+}
+
 int	eval_expr(char *str)
 {
 	int res;
@@ -91,10 +100,7 @@ int	eval_expr(char *str)
 	while (*str != '\0')
 	{
 		skipws(&str);
-		
-		if (*str == '\0')
-			break;
-		if ((last_op != 0 && last_op != ')') && (*str == '+' || *str == '-'))
+		if (is_operand(last_op, *str))
 		{
 			num = getnum(&str);
 			push_stack(opnd, num);
@@ -120,6 +126,7 @@ int	eval_expr(char *str)
 			push_stack(opnd, num);
 			last_op = 0;
 		}
+		skipws(&str);
 	}
 	
 	while(!is_empty(ops))
