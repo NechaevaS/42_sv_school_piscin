@@ -136,12 +136,17 @@ int read_header(int fd, t_map *map)
 int parse_line(char *str, t_map *map, int row)
 {
 	int i;
-	
+#ifdef DEBUG
+	printf("PARSE LINE %d\n", row);
+#endif
 	map->map[row] = (char*) malloc(map->ncols + 1);
 
 	i = 0;
 	while(str[i])
 	{
+#ifdef DEBUG
+		printf("PARSE LINE: i = %d, ncols = %d\n", i, map->ncols);
+#endif
 		if (i >= map->ncols)
 			return (FALSE);
 
@@ -155,6 +160,9 @@ int parse_line(char *str, t_map *map, int row)
 	}
 	
 	map->map[row][i] = '\0';
+#ifdef DEBUG
+	printf("PARSE LINE: return TRUE\n");
+#endif
 	return (TRUE);
 }
 
@@ -181,7 +189,15 @@ int read_map(int fd, t_map *map)
 		return (FALSE);
 
 	row = 0;
-	while(row < map->nrows && !read_map_line(fd, map, row++));
+#ifdef DEBUG
+		printf("READ_MAP 0: row = %d, nrows = %d\n", row, map->nrows);
+#endif
+	while(row < map->nrows && !read_map_line(fd, map, row++))
+	{
+#ifdef DEBUG
+		printf("READ_MAP: row = %d, nrows = %d\n", row, map->nrows);
+#endif
+	}
 
 	if (row != map->nrows)
 		return (FALSE);
