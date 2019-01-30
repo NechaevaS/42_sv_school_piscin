@@ -170,6 +170,40 @@ int read_map(int fd, t_map *map)
 	return (TRUE);
 }
 
+void print_number(int num)
+{
+	char ch;
+	if (num > 9)
+		print_number(num/10);
+	ch = '0' + num%10;
+	write(1, &ch, 1);
+}
+
+void print_point(t_point *point)
+{
+	write(1, "[", 1);
+	print_number(point->x);
+	write(1, ",", 1);
+	print_number(point->y);
+	write(1, "]", 1);
+}
+
+void print_obs_points(t_map *map)
+{
+	t_plist *p;
+
+	p = map->obs_points;
+	while(p)
+	{
+		print_point(&(p->point));
+		if (p->next)
+			write(1, ", ", 2);
+		p = p->next;
+	}
+	write(1, "\n", 1);
+}
+
+
 void print_map(t_map *map)
 {
 	int row;

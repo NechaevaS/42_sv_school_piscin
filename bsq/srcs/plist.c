@@ -38,18 +38,3 @@ void list_apply(t_plist *list, void (*f)(t_plist *))
 	}
 }
 
-#ifdef DEBUG
-void print_point(t_plist *p)
-{
-	printf("[%d, %d]", p->point.x, p->point.y);
-	if (p->next)
-		printf(", ");
-	else
-		printf("\n");
-}
-
-void list_print(t_plist *list)
-{
-	list_apply(list, print_point);
-}
-#endif

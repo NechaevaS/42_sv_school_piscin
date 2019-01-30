@@ -16,6 +16,6 @@ int main()
 	map_init(&map);
 	read_map(0, &map);
 	print_map(&map);
-
+	print_obs_points(&map);
 	return (0);
 }

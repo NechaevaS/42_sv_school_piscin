@@ -47,6 +47,8 @@ void		map_clean(t_map *map);
 void		map_reset(t_map *map);
 int 		read_map(int fd, t_map *map);
 void 		print_map(t_map *map);
+void		print_point(t_point *point);
+void		print_obs_points(t_map *map);
 
 
 void		list_insert(t_plist **list, int x, int y);
