@@ -64,5 +64,5 @@ void		list_insert(t_plist **list, int x, int y);
 void		list_delete(t_plist **list);
 int		read_data(int fd, t_plist** list);
 
-int		solve(t_map *map, t_rectangle *work, t_rectangle *max_square);
+int		solve(t_map *map);
 #endif
