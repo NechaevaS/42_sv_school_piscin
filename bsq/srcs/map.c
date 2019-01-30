@@ -114,6 +114,8 @@ int read_header(int fd, t_map *map)
 
 	map->map = (char **) malloc(sizeof(char*) * map->nrows);
 	map->free_map = (t_free **) malloc(sizeof(t_free*) * map->nrows);
+	map->sqsize = (int **) malloc(sizeof(int *) * map->nrows);
+
 	return (TRUE);
 }
 
@@ -134,6 +136,8 @@ void record_obstacle(t_map *map, int x, int y)
 
 	map->free_map[y][x].left = x;
 	map->free_map[y][x].down = y;
+	map->sqsize[y][x] = 0;
+
 	i = x - 1;
 	while(i >= 0)
 	{
@@ -159,6 +163,7 @@ int parse_line(char *str, t_map *map, int row)
 	
 	map->map[row] = (char*) malloc(map->ncols + 1);
 	map->free_map[row] = (t_free*) malloc(sizeof(t_free) * map->ncols);
+	map->sqsize[row] = (int *) malloc(sizeof(int) * map->ncols);
 
 	i = 0;
 	while(str[i])
@@ -169,6 +174,7 @@ int parse_line(char *str, t_map *map, int row)
 		map->map[row][i] = str[i];
 		map->free_map[row][i].left = map->ncols - 1;
 		map->free_map[row][i].down = map->nrows - 1;
+		map->sqsize[row][i] = 1;
 
 		if (str[i] == map->obstacle)
 			record_obstacle(map, i, row);

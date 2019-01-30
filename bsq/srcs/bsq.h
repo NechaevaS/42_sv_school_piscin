@@ -18,6 +18,7 @@ typedef struct
 	char    obstacle;
 	char    full;
 	char    **map;
+	int     **sqsize;
 	t_free  **free_map;
 } t_map;
 
