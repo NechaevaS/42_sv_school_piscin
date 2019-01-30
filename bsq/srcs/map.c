@@ -192,7 +192,7 @@ int read_map(int fd, t_map *map)
 #ifdef DEBUG
 		printf("READ_MAP 0: row = %d, nrows = %d\n", row, map->nrows);
 #endif
-	while(row < map->nrows && !read_map_line(fd, map, row++))
+	while(row < map->nrows && read_map_line(fd, map, row++))
 	{
 #ifdef DEBUG
 		printf("READ_MAP: row = %d, nrows = %d\n", row, map->nrows);
