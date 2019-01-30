@@ -64,7 +64,6 @@ void map_init(t_map *map) {
 	map->obstacle = '\0';
 	map->full = '\0';
 	map->map = NULL;
-	map->obs_points = NULL;
 }
 
 void map_clean(t_map *map)
@@ -75,11 +74,9 @@ void map_clean(t_map *map)
 	while(map->map != NULL && i < map->nrows)
 	{	
 		free(map->free_map[i]);
-		free(map->map[i]);
 		i++;
 	}
 	
-	list_delete(&(map->obs_points));
 }
 
 void map_reset(t_map	*map)
@@ -134,6 +131,7 @@ void print_freemap(t_map *map)
 void record_obstacle(t_map *map, int x, int y)
 {
 	int i;
+
 	map->free_map[y][x].left = x;
 	map->free_map[y][x].down = y;
 	i = x - 1;
@@ -153,8 +151,6 @@ void record_obstacle(t_map *map, int x, int y)
 		map->free_map[i][x].down = y - 1;
 		i--;
 	}
-
-	list_insert(&(map->obs_points), x, y);
 }
 
 int parse_line(char *str, t_map *map, int row)
@@ -223,31 +219,6 @@ void print_number(int num)
 	ch = '0' + num%10;
 	write(1, &ch, 1);
 }
-
-void print_point(t_point *point)
-{
-	write(1, "[", 1);
-	print_number(point->x);
-	write(1, ",", 1);
-	print_number(point->y);
-	write(1, "]", 1);
-}
-
-void print_obs_points(t_map *map)
-{
-	t_plist *p;
-
-	p = map->obs_points;
-	while(p)
-	{
-		print_point(&(p->point));
-		if (p->next)
-			write(1, ", ", 2);
-		p = p->next;
-	}
-	write(1, "\n", 1);
-}
-
 
 void print_map(t_map *map)
 {
