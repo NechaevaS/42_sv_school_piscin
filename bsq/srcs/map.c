@@ -45,21 +45,11 @@ int 	line_read(int fd, char  *buf, int size)
 	int		nread;
 	char		ch;
 	int 		i;
-#ifdef DEBUG
-	printf("LINE_READ BEGIN\n");
-#endif
+	
 	i = 0;
 	while((nread = read(fd, &ch, 1)) == 1 && ch != '\n' && i < size)
-	{
-#ifdef DEBUG
-		printf("I = %d, CH = %c\n", i, ch);
-#endif
-
 		buf[i++] = ch;
-	}
-#ifdef DEBUG
-	printf("NREAD = %d\n", nread);
-#endif
+	
 	if (nread == -1 || ch != '\n' || i == size)
 		return (FALSE);
 
@@ -98,19 +88,11 @@ int read_header(int fd, t_map *map)
 {
 	char buf[BSIZE];
 	char *p;
-#ifdef DEBUG	
-	printf("HEADER BEGIN\n");
-#endif
+	
 	if (line_read(fd, buf, BSIZE) == -1)
 		return (FALSE);
 
-#ifdef DEBUG
-	printf("HEADER LINE: '%s'\n", buf);
-#endif
 	map->nrows = getnum(buf, &p);
-#ifdef DEBUG
-	printf("HEADER NROWS: %d\n", map->nrows);
-#endif
 	if (p == buf)
 		return (FALSE);
 
@@ -136,17 +118,12 @@ int read_header(int fd, t_map *map)
 int parse_line(char *str, t_map *map, int row)
 {
 	int i;
-#ifdef DEBUG
-	printf("PARSE LINE %d\n", row);
-#endif
+	
 	map->map[row] = (char*) malloc(map->ncols + 1);
 
 	i = 0;
 	while(str[i])
 	{
-#ifdef DEBUG
-		printf("PARSE LINE: i = %d, ncols = %d\n", i, map->ncols);
-#endif
 		if (i >= map->ncols)
 			return (FALSE);
 
@@ -160,20 +137,16 @@ int parse_line(char *str, t_map *map, int row)
 	}
 	
 	map->map[row][i] = '\0';
-#ifdef DEBUG
-	printf("PARSE LINE: return TRUE\n");
-#endif
 	return (TRUE);
 }
 
 int read_map_line(int fd, t_map *map, int row)
 {
 	char buf[BSIZE];
+	
 	if (line_read(fd, buf, BSIZE) == -1)
 		return (FALSE);
-#ifdef DEBUG
-	printf("READ LINE: %s\n", buf);
-#endif
+	
 	if (row == 0)
 		map->ncols = ft_strlen(buf);
 	else if (map->ncols != ft_strlen(buf))
@@ -189,15 +162,7 @@ int read_map(int fd, t_map *map)
 		return (FALSE);
 
 	row = 0;
-#ifdef DEBUG
-		printf("READ_MAP 0: row = %d, nrows = %d\n", row, map->nrows);
-#endif
-	while(row < map->nrows && read_map_line(fd, map, row++))
-	{
-#ifdef DEBUG
-		printf("READ_MAP: row = %d, nrows = %d\n", row, map->nrows);
-#endif
-	}
+	while(row < map->nrows && read_map_line(fd, map, row++));
 
 	if (row != map->nrows)
 		return (FALSE);
