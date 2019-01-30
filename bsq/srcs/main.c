@@ -13,13 +13,13 @@ void process_map(int fd)
 	t_map map;
 
 	map_init(&map);
-	if (!read_map(fd, &map))
+	if (!map_read(fd, &map))
 	{
 		print_map_error();
 		return;
 	}
 	solve(&map);
-	print_map(&map);
+	map_print(&map);
 	map_clean(&map);
 }
 

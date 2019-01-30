@@ -29,6 +29,15 @@ int	getnum(char *str, char **end)
 	return res;
 }
 
+void print_number(int num)
+{
+	char ch;
+	if (num > 9)
+		print_number(num/10);
+	ch = '0' + num%10;
+	write(1, &ch, 1);
+}
+
 int	ft_strlen(char *str)
 {
 	int i;
@@ -64,6 +73,7 @@ void map_init(t_map *map) {
 	map->obstacle = '\0';
 	map->full = '\0';
 	map->map = NULL;
+	map->sqsize = NULL;
 }
 
 void map_clean(t_map *map)
@@ -73,10 +83,10 @@ void map_clean(t_map *map)
 	i = 0;
 	while(map->map != NULL && i < map->nrows)
 	{	
-		free(map->free_map[i]);
+		free(map->map[i]);
+		free(map->sqsize[i]);
 		i++;
 	}
-	
 }
 
 void map_reset(t_map	*map)
@@ -113,48 +123,9 @@ int read_header(int fd, t_map *map)
 		return (FALSE);
 
 	map->map = (char **) malloc(sizeof(char*) * map->nrows);
-	map->free_map = (t_free **) malloc(sizeof(t_free*) * map->nrows);
 	map->sqsize = (int **) malloc(sizeof(int *) * map->nrows);
 
 	return (TRUE);
-}
-
-void print_freemap(t_map *map)
-{
-	int i;
-	int j;
-	for (j = 0; j < map->nrows; j++){
-		for (i = 0; i < map->ncols; i++)
-			printf(" [%2d,%2d]", map->free_map[j][i].down, map->free_map[j][i].left);
-		printf("\n");
-	}
-}
-
-void record_obstacle(t_map *map, int x, int y)
-{
-	int i;
-
-	map->free_map[y][x].left = x;
-	map->free_map[y][x].down = y;
-	map->sqsize[y][x] = 0;
-
-	i = x - 1;
-	while(i >= 0)
-	{
-		if (map->map[y][i] == map->obstacle)
-			break;
-		map->free_map[y][i].left = x - 1;
-		i--;
-	}
-
-	i = y - 1;
-	while(i >= 0)
-	{
-		if (map->map[i][x] == map->obstacle)
-			break;
-		map->free_map[i][x].down = y - 1;
-		i--;
-	}
 }
 
 int parse_line(char *str, t_map *map, int row)
@@ -162,7 +133,6 @@ int parse_line(char *str, t_map *map, int row)
 	int i;
 	
 	map->map[row] = (char*) malloc(map->ncols + 1);
-	map->free_map[row] = (t_free*) malloc(sizeof(t_free) * map->ncols);
 	map->sqsize[row] = (int *) malloc(sizeof(int) * map->ncols);
 
 	i = 0;
@@ -172,12 +142,10 @@ int parse_line(char *str, t_map *map, int row)
 			return (FALSE);
 
 		map->map[row][i] = str[i];
-		map->free_map[row][i].left = map->ncols - 1;
-		map->free_map[row][i].down = map->nrows - 1;
 		map->sqsize[row][i] = 1;
 
 		if (str[i] == map->obstacle)
-			record_obstacle(map, i, row);
+			map->sqsize[row][i] = 0;
 		else if (str[i] != map->empty)
 			return (FALSE);
 		i++;
@@ -201,7 +169,7 @@ int read_map_line(int fd, t_map *map, int row)
 	return (parse_line(buf, map, row));
 }
 
-int read_map(int fd, t_map *map)
+int map_read(int fd, t_map *map)
 {
 	int  row;
 	
@@ -217,16 +185,7 @@ int read_map(int fd, t_map *map)
 	return (TRUE);
 }
 
-void print_number(int num)
-{
-	char ch;
-	if (num > 9)
-		print_number(num/10);
-	ch = '0' + num%10;
-	write(1, &ch, 1);
-}
-
-void print_map(t_map *map)
+void map_print(t_map *map)
 {
 	int row;
 
