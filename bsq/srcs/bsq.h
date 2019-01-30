@@ -18,12 +18,19 @@ typedef struct s_plist
 
 typedef struct
 {
+	int left;
+	int down;
+} t_free;
+
+typedef struct
+{
 	int     nrows;
 	int     ncols;
 	char    empty;
 	char    obstacle;
 	char    full;
 	char    **map;
+	t_free  **free_map;
 	t_plist *obs_points;
 } t_map;
 

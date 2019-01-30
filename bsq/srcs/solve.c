@@ -39,6 +39,35 @@ int rectangle_min_size(t_rectangle *rectangle)
 	return size_y;
 }
 
+int find_best_for_point(t_map *map, int x, int y)
+{
+	int i;
+	int xsize;
+	int ysize;
+	int size;
+
+	if (y >= map->nrows - 1 || x >= map->ncols - 1)
+		return (0);
+
+	size = map->nrows;
+	if (size < map->ncols)
+		size = map->ncols;
+
+	i = 0;	
+	while(x + i < map->ncols && y + i < map->nrows)
+	{
+		xsize = map->free_map[y+i][x+i].left - x + 1;
+		ysize = map->free_map[y+i][x+i].down - y + 1; 
+		if (xsize < size)
+			size = xsize;
+		if (ysize < size)
+			size = ysize;
+		i++;
+	}
+
+	return (size);	
+}
+
 int update_max_square(t_rectangle *max, t_rectangle *cand)
 {
 	if (square_size(max) < square_size(cand))
@@ -153,8 +182,64 @@ void fill_the_square(t_map *map, t_rectangle *square)
 	}
 }
 
+void fill_square(t_map *map, int x, int y, int sz)
+{
+	int i;
+	int j;
+
+	j = y;
+	while(j < y+sz)
+	{
+		i = x;
+		while(i < x + sz)
+		{
+			map->map[j][i] = map->full;
+			i++;
+		}
+		j++;
+	}
+}
+
+int solve_iterative(t_map *map)
+{
+	int i;
+	int j;
+	int best_x;
+	int best_y;
+	int best_size;
+	int curr_size;
+
+	best_size = -1;
+	j = 0;
+	while(j < map->ncols)
+	{
+		i = 0;
+		while(i < map->nrows)
+		{
+			curr_size = find_best_for_point(map, i, j);
+//			printf("X = %d, Y = %d, SZ = %d\n", i, j, curr_size);
+			if (curr_size > best_size)
+			{
+				best_size = curr_size;
+				best_x = i;
+				best_y = j;
+			}
+			
+			i++;
+		}
+		j++;
+	}
+	if (best_size == -1)
+		return (FALSE);
+
+	fill_square(map, best_x, best_y, best_size);
+	return (TRUE);
+}
+
 int solve(t_map *map)
 {
+#if 0
+	printf("SOLVE\n");
 	t_rectangle work;
 	t_rectangle max_square;
 
@@ -170,9 +255,13 @@ int solve(t_map *map)
 
 	if (solve_recursive(map, &work, &max_square))
 	{
+		printf("BEFORE FILL\n");
 		fill_the_square(map, &max_square);
 		return (TRUE);
 	}
-
+	printf("SOLVE DONE\n");
 	return (FALSE);
+#else
+	return (solve_iterative(map));
+#endif
 }

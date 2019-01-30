@@ -73,7 +73,11 @@ void map_clean(t_map *map)
 
 	i = 0;
 	while(map->map != NULL && i < map->nrows)
-		free(map->map[i++]);
+	{	
+		free(map->free_map[i]);
+		free(map->map[i]);
+		i++;
+	}
 	
 	list_delete(&(map->obs_points));
 }
@@ -112,7 +116,45 @@ int read_header(int fd, t_map *map)
 		return (FALSE);
 
 	map->map = (char **) malloc(sizeof(char*) * map->nrows);
+	map->free_map = (t_free **) malloc(sizeof(t_free*) * map->nrows);
 	return (TRUE);
+}
+
+void print_freemap(t_map *map)
+{
+	int i;
+	int j;
+	for (j = 0; j < map->nrows; j++){
+		for (i = 0; i < map->ncols; i++)
+			printf(" [%2d,%2d]", map->free_map[j][i].down, map->free_map[j][i].left);
+		printf("\n");
+	}
+}
+
+void record_obstacle(t_map *map, int x, int y)
+{
+	int i;
+	map->free_map[y][x].left = x;
+	map->free_map[y][x].down = y;
+	i = x - 1;
+	while(i >= 0)
+	{
+		if (map->map[y][i] == map->obstacle)
+			break;
+		map->free_map[y][i].left = x - 1;
+		i--;
+	}
+
+	i = y - 1;
+	while(i >= 0)
+	{
+		if (map->map[i][x] == map->obstacle)
+			break;
+		map->free_map[i][x].down = y - 1;
+		i--;
+	}
+
+	list_insert(&(map->obs_points), x, y);
 }
 
 int parse_line(char *str, t_map *map, int row)
@@ -120,6 +162,7 @@ int parse_line(char *str, t_map *map, int row)
 	int i;
 	
 	map->map[row] = (char*) malloc(map->ncols + 1);
+	map->free_map[row] = (t_free*) malloc(sizeof(t_free) * map->ncols);
 
 	i = 0;
 	while(str[i])
@@ -128,9 +171,11 @@ int parse_line(char *str, t_map *map, int row)
 			return (FALSE);
 
 		map->map[row][i] = str[i];
+		map->free_map[row][i].left = map->ncols - 1;
+		map->free_map[row][i].down = map->nrows - 1;
 
 		if (str[i] == map->obstacle)
-			list_insert(&(map->obs_points), i, row);
+			record_obstacle(map, i, row);
 		else if (str[i] != map->empty)
 			return (FALSE);
 		i++;
