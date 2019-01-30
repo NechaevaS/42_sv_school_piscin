@@ -1,6 +1,9 @@
 #ifndef BSQ_H
 #define BSQ_H
 
+#define TRUE 1
+#define FALSE 0
+
 typedef struct
 {
 	int x;
@@ -34,6 +37,12 @@ typedef struct
 
 } t_strbuf;
 
+typedef struct
+{
+	t_point left_upper;
+	t_point right_bottom;
+} t_rectangle;
+
 
 t_strbuf	*strbuf_create(int size, int inc);
 void		strbuf_delete(t_strbuf *buf);
@@ -55,4 +64,5 @@ void		list_insert(t_plist **list, int x, int y);
 void		list_delete(t_plist **list);
 int		read_data(int fd, t_plist** list);
 
+int		solve(t_map *map, t_rectangle *work, t_rectangle *max_square);
 #endif

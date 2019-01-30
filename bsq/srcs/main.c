@@ -17,5 +17,25 @@ int main()
 	read_map(0, &map);
 	print_map(&map);
 	print_obs_points(&map);
+
+	t_rectangle work = {
+		{
+			0, 0 
+		},
+		{
+			6, 6
+		}
+	};
+
+	t_rectangle max = {
+		{
+			-1, -1
+		},
+		{
+			-1, -1
+		}
+	};
+
+	solve(&map, &work, &max);
 	return (0);
 }
