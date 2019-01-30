@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include "bsq.h"
@@ -39,9 +38,7 @@ int main(int argc, char **argv)
 	{
 		fd = open(argv[i], O_RDONLY);
 		if (fd == -1)
-		{
 			print_map_error();
-		}
 		else
 		{
 			process_map(fd);

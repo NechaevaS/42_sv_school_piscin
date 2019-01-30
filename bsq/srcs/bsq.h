@@ -4,6 +4,9 @@
 #define TRUE 1
 #define FALSE 0
 
+#define ISSPACE(C) (C == ' ' || C == '\t')
+#define ISDIGIT(C) (C >= '0' && C <= '9')
+
 typedef struct
 {
 	int     nrows;
@@ -35,6 +38,10 @@ void		map_init(t_map *map);
 void		map_clean(t_map *map);
 int 		map_read(int fd, t_map *map);
 void 		map_print(t_map *map);
+
+int		getnum(char *str, char **end);
+void		print_number(int num);
+int		ft_strlen(char *str);
 
 int		solve(t_map *map);
 #endif
